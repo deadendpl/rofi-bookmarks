@@ -1,0 +1,15 @@
+Writing a shell script for handling a tsv file was too hard, so I wrote it in Common Lisp.
+* Usage
+#+begin_example
+rofi-bookmarks path-to-tsv-file
+#+end_example
+* TSV file structure
+#+begin_example
+Name of the Website	https://url-of-the-website
+#+end_example
+* Installation
+Install [[https://www.sbcl.org/][SBCL]], and in the repo's root run
+#+begin_example
+make
+#+end_example
+It will make =rofi-bookmarks= executable. Put it anywhere you like.
