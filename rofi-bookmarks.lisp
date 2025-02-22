@@ -5,7 +5,7 @@
 (defvar *bookmarks-list* nil)
 
 (defun bookmarks-read ()
-  "Add entries from `*bookmarks-file*' to `*bookmarks-list*'."
+  "Add entries from `*bookmarks-file*' to `*bookmarks-list*'.
 `*bookmarks-list*' gets sorted alphabetically at the end."
   (with-open-file (str *bookmarks-file* :direction :input)
     (loop for line = (read-line str nil nil)
