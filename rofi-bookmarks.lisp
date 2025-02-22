@@ -6,12 +6,15 @@
 
 (defun bookmarks-read ()
   "Add entries from `*bookmarks-file*' to `*bookmarks-list*'."
+`*bookmarks-list*' gets sorted alphabetically at the end."
   (with-open-file (str *bookmarks-file* :direction :input)
     (loop for line = (read-line str nil nil)
           while line do
           (let ((url (subseq line (+ (search "	" line) 1)))
                 (name (subseq line 0 (search "	" line))))
-            (pushnew `(,name . ,url) *bookmarks-list*)))))
+            (pushnew `(,name . ,url) *bookmarks-list*))))
+  (setf *bookmarks-list* (sort *bookmarks-list*
+                               #'sb-unicode:unicode< :key #'first)))
 
 (defun bookmarks-input ()
   "Present the list of bookmarks names in rofi.
