@@ -5,7 +5,8 @@
 (defvar *bookmarks-list* nil)
 
 (defun bookmarks-read ()
-  (with-open-file (str *bookmarks-file* :direction :INPUT)
+  "Add entries from `*bookmarks-file*' to `*bookmarks-list*'."
+  (with-open-file (str *bookmarks-file* :direction :input)
     (loop for line = (read-line str nil nil)
           while line do
           (let ((url (subseq line (+ (search "	" line) 1)))
@@ -13,6 +14,8 @@
             (pushnew `(,name . ,url) *bookmarks-list*)))))
 
 (defun bookmarks-input ()
+  "Present the list of bookmarks names in rofi.
+Chosen candidate gets returned."
   (let ((string))
     (map 'list (lambda (it)
                  (setf string
@@ -27,13 +30,18 @@
                       :output '(:string :stripped t))))
 
 (defun bookmarks-get-url ()
+  "Return URL matching the output from `bookmark-input'."
   (let ((name (bookmarks-input)))
     (cdr (assoc name *bookmarks-list* :test #'equal))))
 
 (defun bookmarks-open ()
-  (uiop:launch-program (concatenate 'string "xdg-open " (bookmarks-get-url))))
+  "Open the URL returned from `bookmarks-get-url'"
+  (uiop:launch-program
+   (concatenate 'string "xdg-open " (bookmarks-get-url))))
 
 (defun main ()
+  "Unless there is no CLI argument given, assign it to *bookmarks-file*,
+read it to *bookmarks-list* and open one of URLs."
   (when (eq (length sb-ext:*posix-argv*) 1)
     (format t "File hasn't been provided. Please, provide it!")
     (exit :code 1))
