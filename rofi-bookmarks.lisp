@@ -19,10 +19,9 @@
 (defun bookmarks-input ()
   "Present the list of bookmarks names in rofi.
 Chosen candidate gets returned."
-  (let ((string))
-    (setf string (format nil "~{~A~^~%~}"
-                         (mapcar (lambda (x) (car x))
-                                 *bookmarks-list*)))
+  (let ((string (format nil "~{~A~^~%~}"
+                        (mapcar (lambda (x) (car x))
+                                *bookmarks-list*))))
     (uiop:run-program (concatenate 'string "echo \"" string "\" | "
                                    "rofi -dmenu -p \"Bookmark\" -i")
                       :output '(:string :stripped t))))
