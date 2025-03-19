@@ -20,14 +20,9 @@
   "Present the list of bookmarks names in rofi.
 Chosen candidate gets returned."
   (let ((string))
-    (map 'list (lambda (it)
-                 (setf string
-                       (concatenate 'string string
-                                    (format nil "~a~%" (car it)))))
-         *bookmarks-list*)
-    ;; removing trailing newline
-    (setf string (subseq string 0 (position #\Newline string
-                                            :test #'equal :from-end t)))
+    (setf string (format nil "~{~A~^~%~}"
+                         (mapcar (lambda (x) (car x))
+                                 *bookmarks-list*)))
     (uiop:run-program (concatenate 'string "echo \"" string "\" | "
                                    "rofi -dmenu -p \"Bookmark\" -i")
                       :output '(:string :stripped t))))
